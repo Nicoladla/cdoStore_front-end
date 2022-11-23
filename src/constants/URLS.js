@@ -1,10 +1,10 @@
-const baseURL = "localhost:5000";
+const baseApiUrl = "http://localhost:5000";
 
-const URLs = {
-  signIn: `${baseURL}/sign-in`,
-  signUp: `${baseURL}/sign-up`,
-  home: `${baseURL}/`,
-  myCart: `${baseURL}/my-cart`,
+const API_URLs = {
+  signIn: `${baseApiUrl}/sign-in`,
+  signUp: `${baseApiUrl}/sign-up`,
+  products: `${baseApiUrl}/products`,
+  myCart: `${baseApiUrl}/my-cart`,
 };
 
-export default URLs;
+export default API_URLs;
