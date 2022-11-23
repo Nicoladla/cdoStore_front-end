@@ -1,18 +1,21 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-// import setupGamerImage from "../../assets/images/setup-gamer.jpg";
 import { BASE_COLOR } from "../../constants/colors.js";
 import axios from "axios";
 import URLS from "../../constants/URLS.js";
-import { ColorRing } from "react-loader-spinner";
 import Product from "./Product.js";
 import { Link } from "react-router-dom";
+import AuthContext from "../../contexts/AuthContext.js";
+import LoadingDiv from "../../components/LoadingDiv.js";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log(products);
+  const { auth } = useContext(AuthContext);
+
+  console.log(auth);
+
   useEffect(() => {
     axios
       .get(`${URLS.products}`)
@@ -27,21 +30,16 @@ export default function Home() {
     <PageContainer>
       <Header>
         <h1>cdoStore</h1>
-        <AuthDiv>
-          <Link to="/sign-in">Login </Link>|<Link to="/sign-up"> Cadastro</Link>
-        </AuthDiv>
+        {auth || (
+          <AuthDiv>
+            <Link to="/sign-in">Login </Link>|
+            <Link to="/sign-up"> Cadastro</Link>
+          </AuthDiv>
+        )}
       </Header>
       <ProductsContainer>
         {isLoading ? (
-          <ColorRing
-            visible={true}
-            height="65"
-            width="65"
-            ariaLabel="blocks-loading"
-            wrapperStyle={{}}
-            wrapperClass="blocks-wrapper"
-            colors={["gray", "gray", "gray", "gray", "gray"]}
-          />
+          <LoadingDiv isLoading={isLoading} color={BASE_COLOR} />
         ) : (
           <ul>
             {products.map((p) => (

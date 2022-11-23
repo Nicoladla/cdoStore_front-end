@@ -3,21 +3,53 @@ import { BASE_COLOR } from "../../constants/colors";
 import axios from "axios";
 import API_URLs from "../../constants/URLS";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext from "../../contexts/AuthContext";
+import swal from "sweetalert";
 
 export default function Product({ id, name, description, price, image }) {
+  const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  async function addToCart() {
+  function showLoginError() {
+    swal({
+      icon: "error",
+      title: "Parece que você não está logado!",
+      text: "Deseja fazer Login?",
+      buttons: ["Cancelar", "Fazer Login"],
+    }).then((value) => {
+      if (value) {
+        navigate("/login");
+      }
+    });
+  }
+
+  function showGenericError(message) {
+    swal({
+      icon: "error",
+      title: "Ops!...",
+      text: message,
+    });
+  }
+
+  function tryAddItemOnCart() {
     const config = {
       headers: {
-        Authorization: `bearer token}`,
+        Authorization: `bearer ${auth.token}}`,
       },
     };
+    axios
+      .post(`${API_URLs.myCart}/${id}`, config)
+      .then(() => navigate("/my-cart"))
+      .catch((err) => showGenericError(err.response.data));
+  }
 
-    // axios
-    //   .post(`${API_URLs.myCart}/${id}`, config)
-    //   .then(navigate("/my-cart"))
-    //   .catch((err) => console.log(err));
+  function addToCart() {
+    if (!auth) {
+      return showLoginError();
+    }
+
+    tryAddItemOnCart();
   }
 
   return (
@@ -30,9 +62,8 @@ export default function Product({ id, name, description, price, image }) {
       </Description>
       <PurchaseDiv>
         <ButtonAddCart onClick={addToCart}>
-          <ion-icon name="cart-outline"></ion-icon>
+          Comprar <ion-icon name="cart-outline"></ion-icon>
         </ButtonAddCart>
-        <ButtonBuy>Comprar</ButtonBuy>
       </PurchaseDiv>
     </ProductContainer>
   );
@@ -93,27 +124,19 @@ const PurchaseDiv = styled.div`
   margin-top: 20px;
 `;
 
-const ButtonBuy = styled.button`
-  width: 40%;
-  height: 50px;
-  background-color: ${BASE_COLOR};
-  border-radius: 5px;
-  color: white;
-  border: none;
-  font-weight: 700;
-  font-size: 20px;
-`;
-
 const ButtonAddCart = styled.button`
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 40%;
+  justify-content: space-evenly;
+  width: 100%;
   height: 50px;
   background-color: ${BASE_COLOR};
   border-radius: 5px;
   color: white;
   border: none;
   font-weight: 700;
-  font-size: 40px;
+  font-size: 30px;
+  ion-icon {
+    font-size: 40px;
+  }
 `;
