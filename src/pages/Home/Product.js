@@ -32,16 +32,18 @@ export default function Product({ id, name, description, price, image }) {
     });
   }
 
+  console.log(auth);
+
   function tryAddItemOnCart() {
     const config = {
       headers: {
-        Authorization: `bearer ${auth.token}}`,
+        Authorization: auth,
       },
     };
     axios
-      .post(`${API_URLs.myCart}/${id}`, config)
+      .post(`${API_URLs.myCart}/${id}`, {}, config)
       .then(() => navigate("/my-cart"))
-      .catch((err) => showGenericError(err.response.data));
+      .catch((err) => showGenericError(err.response.data.message));
   }
 
   function addToCart() {
