@@ -5,9 +5,10 @@ import ResetCss from "./assets/styles/ResetCss";
 import AuthContext from "./contexts/AuthContext";
 import SignIn from "./pages/Authentication/SignIn";
 import Home from "./pages/Home/Home";
+import MyCart from "./pages/MyCart/MyCart";
 
 function App() {
-  const [auth, setAuth] = useState(undefined);
+  const [auth, setAuth] = useState("637fd2803c4ff3de298da548");
 
   return (
     <>
@@ -18,6 +19,7 @@ function App() {
           <Routes>
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/" element={<Home />} />
+            <Route path="/my-cart" element={<MyCart />} />
           </Routes>
         </BrowserRouter>
       </AuthContext.Provider>
