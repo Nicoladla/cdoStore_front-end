@@ -8,7 +8,6 @@ export default function Header() {
   const [searchForm, setSearchForm] = useState("");
 
   const { auth } = useContext(AuthContext);
-  console.log(searchForm);
 
   function handleForm(e) {
     setSearchForm(e.target.value.toLowerCase());

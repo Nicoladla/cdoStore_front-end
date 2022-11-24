@@ -32,8 +32,6 @@ export default function Product({ id, name, description, price, image }) {
     });
   }
 
-  console.log(auth);
-
   function tryAddItemOnCart() {
     const config = {
       headers: {

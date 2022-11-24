@@ -8,7 +8,7 @@ import Home from "./pages/Home/Home";
 import MyCart from "./pages/MyCart/MyCart";
 
 function App() {
-  const [auth, setAuth] = useState("637fb023d48311dd6c9f26c0");
+  const [auth, setAuth] = useState("637fd2803c4ff3de298da548");
 
   return (
     <>

@@ -10,8 +10,9 @@ import Header from "../../components/Header.js";
 export default function Home() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  console.log(products);
 
-  useEffect(() => {
+  function getProducts() {
     axios
       .get(`${URLS.products}`)
       .then((res) => {
@@ -19,6 +20,10 @@ export default function Home() {
         setProducts(res.data);
       })
       .catch((err) => console.log(err));
+  }
+
+  useEffect(() => {
+    getProducts();
   }, []);
 
   return (
@@ -47,14 +52,10 @@ export default function Home() {
 }
 
 const PageContainer = styled.div`
-  /* width: 800px; */
   height: fit-content;
   min-height: 100vh;
   margin: 0 auto;
   background-color: white;
-  -webkit-box-shadow: -1px 1px 19px 3px rgba(0, 0, 0, 0.13);
-  -moz-box-shadow: -1px 1px 19px 3px rgba(0, 0, 0, 0.13);
-  box-shadow: -1px 1px 19px 3px rgba(0, 0, 0, 0.13);
 `;
 
 const ProductsContainer = styled.main`
