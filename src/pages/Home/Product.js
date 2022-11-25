@@ -75,8 +75,8 @@ const ProductContainer = styled.li`
   align-items: center;
   justify-content: space-between;
   background-color: white;
-  width: 280px;
-  min-height: 200px;
+  width: 250px;
+  height: 380px;
   border-radius: 3px;
   padding: 20px;
   margin-bottom: 30px;
@@ -96,8 +96,8 @@ const Name = styled.h1`
 
 const Image = styled.img`
   object-fit: cover;
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
 `;
 
 const Description = styled.div`

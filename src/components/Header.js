@@ -1,10 +1,11 @@
+import axios from "axios";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { BASE_COLOR } from "../constants/colors";
 import AuthContext from "../contexts/AuthContext";
 
-export default function Header() {
+export default function Header({ calledFrom, setProducts, setIsLoading }) {
   const [searchForm, setSearchForm] = useState("");
 
   const { auth } = useContext(AuthContext);
@@ -19,8 +20,15 @@ export default function Header() {
     }
   }
 
-  function search() {
-    alert(searchForm);
+  async function search() {
+    setIsLoading(true);
+    try {
+      const res = await axios.get(`${calledFrom}/?name=${searchForm}`);
+      setProducts(res.data);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
   }
   return (
     <HeaderDiv>

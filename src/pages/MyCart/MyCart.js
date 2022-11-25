@@ -2,14 +2,15 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import Header from "../../components/Header";
+import LoadingDiv from "../../components/LoadingDiv";
 import { BASE_COLOR } from "../../constants/colors";
 import API_URLs from "../../constants/URLS";
 import AuthContext from "../../contexts/AuthContext";
 
 export default function MyCart() {
   const [cartProducts, setCartProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  console.log(cartProducts);
   const { auth } = useContext(AuthContext);
   function getMyCart() {
     const config = {
@@ -17,10 +18,14 @@ export default function MyCart() {
         Authorization: auth,
       },
     };
-    axios
-      .get(`${API_URLs.myCart}`, config)
-      .then((res) => setCartProducts(res.data))
-      .catch((err) => console.log(err));
+
+    try {
+      const res = axios.get(`${API_URLs.myCart}`, config);
+      setIsLoading(false);
+      setCartProducts(res.data);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   useEffect(() => {
@@ -30,23 +35,27 @@ export default function MyCart() {
 
   return (
     <PageContainer>
-      <Header />
+      <Header calledFrom={API_URLs.myCart} setProducts={setCartProducts} />
       <ProductsContainer>
-        <ul>
-          {cartProducts.map((p) => (
-            <CartProduct>
-              <Image src={p.image} />
-              <ProductText>
-                <Title>
-                  {p.name} ({p.amountInCart})
-                </Title>
-                <Amount>Disponível em estoque: {p.inStock}</Amount>
-                <Description>{p.description}</Description>
-                <Price>R${p.price}</Price>
-              </ProductText>
-            </CartProduct>
-          ))}
-        </ul>
+        {isLoading ? (
+          <LoadingDiv isLoading={isLoading} color={BASE_COLOR} />
+        ) : (
+          <ul>
+            {cartProducts.map((p) => (
+              <CartProduct>
+                <Image src={p.image} />
+                <ProductText>
+                  <Title>
+                    {p.name} ({p.amountInCart})
+                  </Title>
+                  <Amount>Disponível em estoque: {p.inStock}</Amount>
+                  <Description>{p.description}</Description>
+                  <Price>R${p.price}</Price>
+                </ProductText>
+              </CartProduct>
+            ))}
+          </ul>
+        )}
       </ProductsContainer>
     </PageContainer>
   );
