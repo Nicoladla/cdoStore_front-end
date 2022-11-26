@@ -1,14 +1,16 @@
 import axios from "axios";
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BASE_COLOR } from "../constants/colors";
+import API_URLs from "../constants/URLS";
 import AuthContext from "../contexts/AuthContext";
 
 export default function Header({ calledFrom, setProducts, setIsLoading }) {
   const [searchForm, setSearchForm] = useState("");
 
   const { auth } = useContext(AuthContext);
+  const navigate = useNavigate("/my-cart");
 
   function handleForm(e) {
     setSearchForm(e.target.value.toLowerCase());
@@ -21,9 +23,14 @@ export default function Header({ calledFrom, setProducts, setIsLoading }) {
   }
 
   async function search() {
+    const config = {
+      headers: {
+        Authorization: auth,
+      },
+    };
     setIsLoading(true);
     try {
-      const res = await axios.get(`${calledFrom}/?name=${searchForm}`);
+      const res = await axios.get(`${calledFrom}/?name=${searchForm}`, config);
       setProducts(res.data);
       setIsLoading(false);
     } catch (err) {
@@ -41,7 +48,19 @@ export default function Header({ calledFrom, setProducts, setIsLoading }) {
         <ion-icon onClick={search} name="search-outline"></ion-icon>
       </DivSearch>
       <h1>cdoStore</h1>
-      {auth || (
+      {(auth && calledFrom === API_URLs.products ? (
+        <ion-icon
+          onClick={() => navigate("my-cart")}
+          name="cart-outline"
+        ></ion-icon>
+      ) : (
+        <>
+          <ion-icon
+            onClick={() => navigate("/")}
+            name="home-outline"
+          ></ion-icon>
+        </>
+      )) || (
         <AuthDiv>
           <Link to="/sign-in">Login </Link>|<Link to="/sign-up"> Cadastro</Link>
         </AuthDiv>
@@ -67,6 +86,20 @@ const HeaderDiv = styled.header`
 
   h1 {
     font-size: 80px;
+    @media (max-width: 700px) {
+      display: none;
+    }
+  }
+
+  ion-icon {
+    font-size: 50px;
+  }
+
+  @media (max-width: 700px) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 100;
   }
 `;
 
