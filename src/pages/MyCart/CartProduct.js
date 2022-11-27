@@ -16,8 +16,8 @@ export default function CartProduct(props) {
     image,
     inStock,
     amountInCart,
-    isPriceLoading,
-    setIsPriceLoading,
+    wasClickedId,
+    setWasClickedId,
   } = props;
 
   const { auth } = useContext(AuthContext);
@@ -29,7 +29,7 @@ export default function CartProduct(props) {
       buttons: ["Cancelar", "Remover"],
     }).then(async (value) => {
       if (value) {
-        setIsPriceLoading(true);
+        setWasClickedId(undefined);
         const config = {
           headers: {
             Authorization: auth,
@@ -37,7 +37,7 @@ export default function CartProduct(props) {
         };
         try {
           await axios.delete(`${API_URLs.myCart}/${id}/?all=true`, config);
-          setIsPriceLoading(false);
+          setWasClickedId(undefined);
         } catch (err) {
           console.log(err);
           swal({
@@ -51,7 +51,6 @@ export default function CartProduct(props) {
   }
 
   async function removeFromCart(id) {
-    setIsPriceLoading(true);
     const config = {
       headers: {
         Authorization: auth,
@@ -59,7 +58,7 @@ export default function CartProduct(props) {
     };
     try {
       await axios.delete(`${API_URLs.myCart}/${id}`, config);
-      setIsPriceLoading(false);
+      setWasClickedId(undefined);
     } catch (err) {
       console.log(err);
       swal({
@@ -71,7 +70,6 @@ export default function CartProduct(props) {
   }
 
   async function addOnCart(id) {
-    setIsPriceLoading(true);
     const config = {
       headers: {
         Authorization: auth,
@@ -79,7 +77,7 @@ export default function CartProduct(props) {
     };
     try {
       await axios.post(`${API_URLs.myCart}/${id}`, {}, config);
-      setIsPriceLoading(false);
+      setWasClickedId(undefined);
     } catch (err) {
       console.log(err);
       swal({
@@ -112,11 +110,20 @@ export default function CartProduct(props) {
         </AmountOptions>
         <Price>
           <span>
-            R$
-            {(price * amountInCart)
-              .toFixed(2)
-              .toString()
-              .replace(".", ",")} (x {amountInCart})
+            {wasClickedId === id ? (
+              console.log(id)
+            ) : (
+              // <LoadingDiv isLoading={true} />
+              <>
+                R$
+                {(price * amountInCart)
+                  .toFixed(2)
+                  .toString()
+                  .replace(".", ",")}{" "}
+                (x
+                {amountInCart})
+              </>
+            )}
           </span>
         </Price>
       </Options>

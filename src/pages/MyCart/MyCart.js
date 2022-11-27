@@ -13,8 +13,7 @@ import CartProduct from "./CartProduct";
 export default function MyCart() {
   const [cartProducts, setCartProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isPriceLoading, setIsPriceLoading] = useState(false);
-  console.log(cartProducts);
+  const [wasClickedId, setWasClickedId] = useState(undefined);
 
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -60,40 +59,43 @@ export default function MyCart() {
 
     getMyCart();
     //eslint-disable-next-line
-  }, [isLoading, isPriceLoading]);
+  }, [isLoading]);
 
   return (
-    <PageContainer>
+    <>
       <Header
         calledFrom={API_URLs.myCart}
         setIsLoading={setIsLoading}
         setProducts={setCartProducts}
       />
-      <ProductsContainer>
-        {isLoading ? (
-          <LoadingDiv isLoading={isLoading} color={BASE_COLOR} />
-        ) : cartProducts.length === 0 ? (
-          <Options>Você ainda não tem itens no carrinho!</Options>
-        ) : (
-          <ul>
-            {cartProducts.map((p) => (
-              <CartProduct
-                key={p._id}
-                id={p._id}
-                name={p.name}
-                description={p.description}
-                price={p.price}
-                image={p.image}
-                inStock={p.inStock}
-                amountInCart={p.amountInCart}
-                isPriceLoading={isPriceLoading}
-                setIsPriceLoading={setIsPriceLoading}
-              />
-            ))}
-          </ul>
-        )}
-      </ProductsContainer>
-    </PageContainer>
+      <PageContainer>
+        <ProductsContainer>
+          {isLoading ? (
+            <LoadingDiv isLoading={isLoading} color={BASE_COLOR} />
+          ) : cartProducts.length === 0 ? (
+            <Options>Você ainda não tem itens no carrinho!</Options>
+          ) : (
+            <ul>
+              {cartProducts.map((p) => (
+                <CartProduct
+                  key={p._id}
+                  id={p._id}
+                  name={p.name}
+                  description={p.description}
+                  price={p.price}
+                  image={p.image}
+                  inStock={p.inStock}
+                  amountInCart={p.amountInCart}
+                  wasClickedId={wasClickedId}
+                  setWasClickedId={setWasClickedId}
+                />
+              ))}
+            </ul>
+          )}
+          <Button>Fechar pedido</Button>
+        </ProductsContainer>
+      </PageContainer>
+    </>
   );
 }
 
@@ -108,15 +110,27 @@ const PageContainer = styled.div`
 `;
 
 const ProductsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 90%;
   max-width: 600px;
   margin: 20px auto;
 `;
-
 const Options = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   height: 200px;
+`;
+
+const Button = styled.button`
+  width: 50%;
+  height: 50px;
+  border: none;
+  background-color: ${BASE_COLOR};
+  color: white;
+  font-size: 25px;
+  border-radius: 3px;
 `;
