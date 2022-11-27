@@ -11,18 +11,7 @@ export default function Product({ id, name, description, price, image }) {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  function showLoginError() {
-    swal({
-      icon: "error",
-      title: "Parece que você não está logado!",
-      text: "Deseja fazer Login?",
-      buttons: ["Cancelar", "Fazer Login"],
-    }).then((value) => {
-      if (value) {
-        navigate("/login");
-      }
-    });
-  }
+  function showLoginError() {}
 
   function showGenericError(message) {
     swal({
@@ -46,7 +35,8 @@ export default function Product({ id, name, description, price, image }) {
 
   function addToCart() {
     if (!auth) {
-      return showLoginError();
+      showLoginError();
+      return;
     }
 
     tryAddItemOnCart();

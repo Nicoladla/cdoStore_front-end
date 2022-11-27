@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BASE_COLOR } from "../constants/colors";
+import API_URLs from "../constants/URLS";
 // import API_URLs from "../constants/URLS";
 import AuthContext from "../contexts/AuthContext";
 
@@ -37,6 +38,22 @@ export default function Header({ calledFrom, setProducts, setIsLoading }) {
       console.log(err);
     }
   }
+
+  function showIcon() {
+    if (auth) {
+      if (calledFrom === API_URLs.myCart) {
+        return <ion-icon onClick={() => navigate("/")} name="home-outline" />;
+      }
+      return (
+        <ion-icon onClick={() => navigate("/my-cart")} name="cart-outline" />
+      );
+    }
+    return (
+      <AuthDiv>
+        <Link to="/sign-in">Login </Link>|<Link to="/sign-up"> Cadastro</Link>
+      </AuthDiv>
+    );
+  }
   return (
     <HeaderDiv>
       <DivSearch>
@@ -49,11 +66,7 @@ export default function Header({ calledFrom, setProducts, setIsLoading }) {
       </DivSearch>
       <h1>cdoStore</h1>
       {}
-      {auth || (
-        <AuthDiv>
-          <Link to="/sign-in">Login </Link>|<Link to="/sign-up"> Cadastro</Link>
-        </AuthDiv>
-      )}
+      {showIcon()}
     </HeaderDiv>
   );
 }
