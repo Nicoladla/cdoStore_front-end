@@ -1,13 +1,17 @@
+import axios from "axios";
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BASE_COLOR } from "../constants/colors";
+import API_URLs from "../constants/URLS";
+// import API_URLs from "../constants/URLS";
 import AuthContext from "../contexts/AuthContext";
 
-export default function Header() {
+export default function Header({ calledFrom, setProducts, setIsLoading }) {
   const [searchForm, setSearchForm] = useState("");
 
   const { auth } = useContext(AuthContext);
+  const navigate = useNavigate("/my-cart");
 
   function handleForm(e) {
     setSearchForm(e.target.value.toLowerCase());
@@ -19,8 +23,36 @@ export default function Header() {
     }
   }
 
-  function search() {
-    alert(searchForm);
+  async function search() {
+    const config = {
+      headers: {
+        Authorization: auth,
+      },
+    };
+    setIsLoading(true);
+    try {
+      const res = await axios.get(`${calledFrom}/?name=${searchForm}`, config);
+      setProducts(res.data);
+      setIsLoading(false);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  function showIcon() {
+    if (auth) {
+      if (calledFrom === API_URLs.myCart) {
+        return <ion-icon onClick={() => navigate("/")} name="home-outline" />;
+      }
+      return (
+        <ion-icon onClick={() => navigate("/my-cart")} name="cart-outline" />
+      );
+    }
+    return (
+      <AuthDiv>
+        <Link to="/sign-in">Login </Link>|<Link to="/sign-up"> Cadastro</Link>
+      </AuthDiv>
+    );
   }
   return (
     <HeaderDiv>
@@ -33,11 +65,8 @@ export default function Header() {
         <ion-icon onClick={search} name="search-outline"></ion-icon>
       </DivSearch>
       <h1>cdoStore</h1>
-      {auth || (
-        <AuthDiv>
-          <Link to="/sign-in">Login </Link>|<Link to="/sign-up"> Cadastro</Link>
-        </AuthDiv>
-      )}
+      {}
+      {showIcon()}
     </HeaderDiv>
   );
 }
@@ -59,6 +88,20 @@ const HeaderDiv = styled.header`
 
   h1 {
     font-size: 80px;
+    @media (max-width: 700px) {
+      display: none;
+    }
+  }
+
+  ion-icon {
+    font-size: 50px;
+  }
+
+  @media (max-width: 700px) {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 100;
   }
 `;
 
