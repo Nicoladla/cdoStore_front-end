@@ -11,18 +11,7 @@ export default function Product({ id, name, description, price, image }) {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  function showLoginError() {
-    swal({
-      icon: "error",
-      title: "Parece que você não está logado!",
-      text: "Deseja fazer Login?",
-      buttons: ["Cancelar", "Fazer Login"],
-    }).then((value) => {
-      if (value) {
-        navigate("/login");
-      }
-    });
-  }
+  function showLoginError() {}
 
   function showGenericError(message) {
     swal({
@@ -46,7 +35,8 @@ export default function Product({ id, name, description, price, image }) {
 
   function addToCart() {
     if (!auth) {
-      return showLoginError();
+      showLoginError();
+      return;
     }
 
     tryAddItemOnCart();
@@ -75,8 +65,8 @@ const ProductContainer = styled.li`
   align-items: center;
   justify-content: space-between;
   background-color: white;
-  width: 280px;
-  min-height: 200px;
+  width: 250px;
+  height: 380px;
   border-radius: 3px;
   padding: 20px;
   margin-bottom: 30px;
@@ -96,8 +86,8 @@ const Name = styled.h1`
 
 const Image = styled.img`
   object-fit: cover;
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
 `;
 
 const Description = styled.div`
