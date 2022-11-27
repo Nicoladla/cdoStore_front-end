@@ -11,7 +11,7 @@ import Home from "./pages/Home/Home";
 import MyCart from "./pages/MyCart/MyCart";
 
 function App() {
-  const [auth, setAuth] = useState("637fd2803c4ff3de298da548");
+  const [auth, setAuth] = useState("");
 
   return (
     <>
@@ -21,9 +21,9 @@ function App() {
       <AuthContext.Provider value={{ auth, setAuth }}>
         <BrowserRouter>
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/" element={<Home />} />
             <Route path="/my-cart" element={<MyCart />} />
           </Routes>
         </BrowserRouter>
