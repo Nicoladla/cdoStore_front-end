@@ -8,10 +8,12 @@ import LoadingDiv from "../../components/LoadingDiv";
 import { BASE_COLOR } from "../../constants/colors";
 import API_URLs from "../../constants/URLS";
 import AuthContext from "../../contexts/AuthContext";
+import CartProduct from "./CartProduct";
 
 export default function MyCart() {
   const [cartProducts, setCartProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPriceLoading, setIsPriceLoading] = useState(false);
   console.log(cartProducts);
 
   const { auth } = useContext(AuthContext);
@@ -51,66 +53,6 @@ export default function MyCart() {
     }
   }
 
-  async function deleteFromCart(id) {
-    setIsLoading(true);
-    const config = {
-      headers: {
-        Authorization: auth,
-      },
-    };
-    try {
-      await axios.delete(`${API_URLs.myCart}/${id}/?all=true`, config);
-      setIsLoading(false);
-    } catch (err) {
-      console.log(err);
-      swal({
-        icon: "error",
-        title: "Ops!...",
-        text: err.response.data.message,
-      });
-    }
-  }
-
-  async function removeFromCart(id) {
-    setIsLoading(true);
-    const config = {
-      headers: {
-        Authorization: auth,
-      },
-    };
-    try {
-      await axios.delete(`${API_URLs.myCart}/${id}`, config);
-      setIsLoading(false);
-    } catch (err) {
-      console.log(err);
-      swal({
-        icon: "error",
-        title: "Ops!...",
-        text: err.response.data.message,
-      });
-    }
-  }
-
-  async function addOnCart(id) {
-    setIsLoading(true);
-    const config = {
-      headers: {
-        Authorization: auth,
-      },
-    };
-    try {
-      await axios.post(`${API_URLs.myCart}/${id}`, {}, config);
-      setIsLoading(false);
-    } catch (err) {
-      console.log(err);
-      swal({
-        icon: "error",
-        title: "Ops!...",
-        text: err.response.data.message,
-      });
-    }
-  }
-
   useEffect(() => {
     if (!auth) {
       showLoginError();
@@ -118,7 +60,7 @@ export default function MyCart() {
 
     getMyCart();
     //eslint-disable-next-line
-  }, [isLoading]);
+  }, [isLoading, isPriceLoading]);
 
   return (
     <PageContainer>
@@ -135,33 +77,18 @@ export default function MyCart() {
         ) : (
           <ul>
             {cartProducts.map((p) => (
-              <CartProduct key={p._id}>
-                <Image src={p.image} />
-                <ProductText>
-                  <Title>{p.name}</Title>
-                  <Description>{p.description}</Description>
-                  <Amount>Em estoque: {p.inStock}</Amount>
-                </ProductText>
-                <Options>
-                  <ButtonCancel>
-                    <ion-icon
-                      onClick={() => deleteFromCart(p._id)}
-                      name="trash-outline"
-                    ></ion-icon>
-                  </ButtonCancel>
-                  <AmountOptions>
-                    <Button onClick={() => removeFromCart(p._id)}>-</Button>
-                    <span>{p.amountInCart}</span>
-                    <Button onClick={() => addOnCart(p._id)}>+</Button>
-                  </AmountOptions>
-                  <Price>
-                    <span>
-                      R$
-                      {(p.price * p.amountInCart).toString().replace(".", ",")}
-                    </span>
-                  </Price>
-                </Options>
-              </CartProduct>
+              <CartProduct
+                key={p._id}
+                id={p._id}
+                name={p.name}
+                description={p.description}
+                price={p.price}
+                image={p.image}
+                inStock={p.inStock}
+                amountInCart={p.amountInCart}
+                isPriceLoading={isPriceLoading}
+                setIsPriceLoading={setIsPriceLoading}
+              />
             ))}
           </ul>
         )}
@@ -186,89 +113,10 @@ const ProductsContainer = styled.div`
   margin: 20px auto;
 `;
 
-const CartProduct = styled.li`
-  display: flex;
-  justify-content: space-around;
-  padding: 15px;
-  border-radius: 3px;
-  -webkit-box-shadow: -1px 1px 19px 3px rgba(0, 0, 0, 0.13);
-  -moz-box-shadow: -1px 1px 19px 3px rgba(0, 0, 0, 0.13);
-  box-shadow: -1px 1px 19px 3px rgba(0, 0, 0, 0.13);
-  margin-bottom: 15px;
-  font-size: 20px;
-`;
-
-const ProductText = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  width: 40%;
-  height: 200px;
-`;
-
-const Title = styled.span`
-  font-weight: bold;
-  font-size: 19px;
-`;
-
-const Amount = styled.span``;
-
-const Image = styled.img`
-  object-fit: cover;
-  width: 200px;
-  height: 200px;
-  margin-bottom: 15px;
-`;
-
-const Description = styled.span``;
-
 const Options = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   height: 200px;
-`;
-
-const ButtonCancel = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  background-color: ${BASE_COLOR};
-  border: none;
-  font-size: 20px;
-  font-weight: bold;
-  color: white;
-  border-radius: 3px;
-  padding: 5px;
-`;
-
-const AmountOptions = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 30px;
-  text-align: center;
-  width: 100px;
-`;
-
-const Button = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 30px;
-  background-color: ${BASE_COLOR};
-  border: none;
-  color: white;
-  border-radius: 3px;
-  font-size: 20px;
-  font-weight: bold;
-`;
-const Price = styled.span`
-  font-weight: bold;
-  color: ${BASE_COLOR};
 `;

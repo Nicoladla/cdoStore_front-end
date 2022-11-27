@@ -8,7 +8,9 @@ import Home from "./pages/Home/Home";
 import MyCart from "./pages/MyCart/MyCart";
 
 function App() {
-  const [auth, setAuth] = useState("63816017df1266e2e5bdd570");
+  const [auth, setAuth] = useState(
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MzgzMDhkN2UwZGNkYjVkYjQ1YTYzMTYiLCJpYXQiOjE2Njk1MzE4NjUsImV4cCI6MTY2OTU1MzQ2NX0.tZV23gPTBfAsoYe3CACW_a7RlEkZPJnu-HsJqF6dJMQ"
+  );
 
   return (
     <>

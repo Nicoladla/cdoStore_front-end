@@ -3,7 +3,7 @@ import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { BASE_COLOR } from "../constants/colors";
-import API_URLs from "../constants/URLS";
+// import API_URLs from "../constants/URLS";
 import AuthContext from "../contexts/AuthContext";
 
 export default function Header({ calledFrom, setProducts, setIsLoading }) {
@@ -48,19 +48,8 @@ export default function Header({ calledFrom, setProducts, setIsLoading }) {
         <ion-icon onClick={search} name="search-outline"></ion-icon>
       </DivSearch>
       <h1>cdoStore</h1>
-      {(auth && calledFrom === API_URLs.products ? (
-        <ion-icon
-          onClick={() => navigate("my-cart")}
-          name="cart-outline"
-        ></ion-icon>
-      ) : (
-        <>
-          <ion-icon
-            onClick={() => navigate("/")}
-            name="home-outline"
-          ></ion-icon>
-        </>
-      )) || (
+      {}
+      {auth || (
         <AuthDiv>
           <Link to="/sign-in">Login </Link>|<Link to="/sign-up"> Cadastro</Link>
         </AuthDiv>
