@@ -1,6 +1,12 @@
 import styled from "styled-components";
+import swal from "sweetalert";
 
 export default function ConfirmPurchase({ info, setShowConfirmation }) {
+  function confirm() {
+    swal({ icon: "success", text: "Pedido Finalizado" });
+    setShowConfirmation(false);
+  }
+
   return (
     <ConfirmPurchaseScreen>
       <ConfirmScreen>
@@ -47,7 +53,7 @@ export default function ConfirmPurchase({ info, setShowConfirmation }) {
         </Content>
         <Buttons>
           <button onClick={() => setShowConfirmation(false)}>Cancelar</button>
-          <button>Confirmar</button>
+          <button onClick={confirm}>Confirmar</button>
         </Buttons>
       </ConfirmScreen>
     </ConfirmPurchaseScreen>
