@@ -15,19 +15,22 @@ export default function ConfirmPurchase() {
             </ul> */}
             <p>Produtos:</p>
             <table border="1">
-              <tr>
-                <td>1</td>
-                <td>Fone top</td>
-                <td>R$ 200,00</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Teclado pop it its</td>
-                <td>R$ 250,00</td>
-              </tr>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Fone top</td>
+                  <td>R$ 200,00</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Teclado pop it its</td>
+                  <td>R$ 250,00</td>
+                </tr>
+              </tbody>
             </table>
             <p>Valor total: R$ 10.000,00</p>
           </section>
+
           <div></div>
           <section>
             <p>Cliente: Nicolas</p>
@@ -82,7 +85,7 @@ const Content = styled.main`
   div {
     background-color: #eda793;
     width: 1px;
-    height: 80%;
+    height: 90%;
     margin: auto 0;
   }
 
