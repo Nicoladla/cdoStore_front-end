@@ -85,7 +85,7 @@ export default function SignIn() {
       </Form>
 
       <p>
-        Não tem uma conta? <Link to="/sign-in">Cadastre-se!</Link>
+        Não tem uma conta? <Link to="/sign-up">Cadastre-se!</Link>
       </p>
     </ScreeSignIn>
   );

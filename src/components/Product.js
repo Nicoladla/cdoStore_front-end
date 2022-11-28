@@ -1,17 +1,28 @@
 import styled from "styled-components";
-import { BASE_COLOR } from "../../constants/colors";
+import { BASE_COLOR } from "../constants/colors";
 import axios from "axios";
-import API_URLs from "../../constants/URLS";
+import API_URLs from "../constants/URLS";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
-import AuthContext from "../../contexts/AuthContext";
+import AuthContext from "../contexts/AuthContext";
 import swal from "sweetalert";
 
 export default function Product({ id, name, description, price, image }) {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  function showLoginError() {}
+  function showLoginError() {
+    swal({
+      icon: "error",
+      title: "Parece que você não está logado!",
+      text: "Deseja fazer login?",
+      buttons: ["Cancelar", "Fazer login"],
+    }).then((value) => {
+      if (value) {
+        navigate("/sign-in");
+      }
+    });
+  }
 
   function showGenericError(message) {
     swal({
@@ -24,7 +35,7 @@ export default function Product({ id, name, description, price, image }) {
   function tryAddItemOnCart() {
     const config = {
       headers: {
-        Authorization: auth,
+        Authorization: `Bearer ${auth}`,
       },
     };
     axios
