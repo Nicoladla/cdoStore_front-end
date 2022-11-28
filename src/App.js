@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import GlobalStyle from "./assets/styles/GlobalStyle";
 import ResetCss from "./assets/styles/ResetCss";
-import ConfirmPurchase from "./components/ConfirmPurchase";
 
 import AuthContext from "./contexts/AuthContext";
 import SignIn from "./pages/Authentication/SignIn";
@@ -23,7 +22,6 @@ function App() {
       <AuthContext.Provider value={{ auth, setAuth }}>
         <BrowserRouter>
           <Routes>
-            <Route path="teste" element={<ConfirmPurchase />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/" element={<Home />} />
             <Route path="/sign-in" element={<SignIn />} />
