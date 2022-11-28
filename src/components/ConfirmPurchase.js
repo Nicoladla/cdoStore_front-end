@@ -24,7 +24,7 @@ export default function ConfirmPurchase({ info, setShowConfirmation }) {
                     <tr>
                       <td>{i.amount}</td>
                       <td>{i.name}</td>
-                      <td>{i.price}</td>
+                      <td>R${i.price}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -38,7 +38,7 @@ export default function ConfirmPurchase({ info, setShowConfirmation }) {
           <div></div>
           <section>
             <p>
-              <span>Cliente: </span>Nicolas
+              <span>Cliente: </span>______
             </p>
             <p>
               <span>CPF: </span>______
