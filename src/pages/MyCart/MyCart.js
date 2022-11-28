@@ -16,6 +16,8 @@ export default function MyCart() {
   const [cartProducts, setCartProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubtotalLoading, setIsSubtotalLoading] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [info, setInfo] = useState(undefined);
 
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
@@ -52,10 +54,17 @@ export default function MyCart() {
   }
 
   function confirmPurchase() {
-    const info = cartProducts.map((p) => {
-      return [{ name: p.name, price: p.price, amount: p.amountInCart }];
+    const arrayInfo = cartProducts.map((p) => {
+      return {
+        name: p.name,
+        amount: p.amount,
+        price: p.price,
+      };
     });
-    info.total = subTotalInfo.subTotal;
+
+    arrayInfo.total = subTotalInfo.subTotal;
+    setInfo(arrayInfo);
+    setShowConfirmation(true);
   }
 
   async function getMyCart() {
@@ -97,7 +106,13 @@ export default function MyCart() {
       />
       <PageContainer>
         <ProductsContainer>
-          <ConfirmPurchase />
+          {showConfirmation && (
+            <ConfirmPurchase
+              info={info}
+              setShowConfirmation={setShowConfirmation}
+            />
+          )}
+
           {isLoading ? (
             <LoadingDiv isLoading={isLoading} color={BASE_COLOR} />
           ) : cartProducts.length === 0 ? (
