@@ -54,6 +54,7 @@ export default function Header({ calledFrom, setProducts, setIsLoading }) {
       </AuthDiv>
     );
   }
+
   return (
     <HeaderDiv>
       <DivSearch>
@@ -65,7 +66,6 @@ export default function Header({ calledFrom, setProducts, setIsLoading }) {
         <ion-icon onClick={search} name="search-outline"></ion-icon>
       </DivSearch>
       <h1>cdoStore</h1>
-      {}
       {showIcon()}
     </HeaderDiv>
   );

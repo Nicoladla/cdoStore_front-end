@@ -8,25 +8,44 @@ import LoadingDiv from "../../components/LoadingDiv";
 import { BASE_COLOR } from "../../constants/colors";
 import API_URLs from "../../constants/URLS";
 import AuthContext from "../../contexts/AuthContext";
-import CartProduct from "./CartProduct";
+import CartProduct from "../../components/CartProduct";
+import { ColorRing } from "react-loader-spinner";
 
 export default function MyCart() {
   const [cartProducts, setCartProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [wasClickedId, setWasClickedId] = useState(undefined);
+  const [isSubtotalLoading, setIsSubtotalLoading] = useState(false);
 
-  const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
+  const { auth } = useContext(AuthContext);
+
+  const subTotalInfo = calculateSubTotalInfo();
+
+  function calculateSubTotalInfo() {
+    if (cartProducts) {
+      let totalItems = 0;
+      let subTotal = 0;
+      for (let item of cartProducts) {
+        totalItems += item.amountInCart;
+        subTotal += item.amountInCart * item.price;
+      }
+      return {
+        totalItems,
+        subTotal,
+      };
+    }
+    return 0;
+  }
 
   function showLoginError() {
     swal({
       icon: "error",
       title: "Parece que você não está logado!",
-      text: "Deseja fazer Login?",
-      buttons: ["Cancelar", "Fazer Login"],
+      text: "Deseja fazer login?",
+      button: "Fazer login",
     }).then((value) => {
       if (value) {
-        navigate("/login");
+        navigate("/sign-in");
       }
     });
   }
@@ -54,12 +73,12 @@ export default function MyCart() {
 
   useEffect(() => {
     if (!auth) {
-      showLoginError();
+      return showLoginError();
     }
 
     getMyCart();
     //eslint-disable-next-line
-  }, [isLoading]);
+  }, [isLoading, isSubtotalLoading]);
 
   return (
     <>
@@ -75,24 +94,51 @@ export default function MyCart() {
           ) : cartProducts.length === 0 ? (
             <Options>Você ainda não tem itens no carrinho!</Options>
           ) : (
-            <ul>
-              {cartProducts.map((p) => (
-                <CartProduct
-                  key={p._id}
-                  id={p._id}
-                  name={p.name}
-                  description={p.description}
-                  price={p.price}
-                  image={p.image}
-                  inStock={p.inStock}
-                  amountInCart={p.amountInCart}
-                  wasClickedId={wasClickedId}
-                  setWasClickedId={setWasClickedId}
-                />
-              ))}
-            </ul>
+            <>
+              <SubTotalDiv>
+                <Text>
+                  Subtotal:
+                  <Strong>
+                    R$
+                    {subTotalInfo.subTotal
+                      .toFixed(2)
+                      .toString()
+                      .replace(".", ",")}
+                  </Strong>
+                </Text>
+                <Button>
+                  {isSubtotalLoading ? (
+                    <ColorRing
+                      visible={isSubtotalLoading}
+                      height="55"
+                      width="65"
+                      ariaLabel="blocks-loading"
+                      wrapperStyle={{}}
+                      wrapperClass="blocks-wrapper"
+                      colors={["white", "white", "white", "white", "white"]}
+                    />
+                  ) : (
+                    <>Fechar pedido ({subTotalInfo.totalItems} itens) </>
+                  )}
+                </Button>
+              </SubTotalDiv>
+              <ul>
+                {cartProducts.map((p) => (
+                  <CartProduct
+                    key={p._id}
+                    id={p._id}
+                    name={p.name}
+                    description={p.description}
+                    price={p.price}
+                    image={p.image}
+                    inStock={p.inStock}
+                    amountInCart={p.amountInCart}
+                    setIsSubtotalLoading={setIsSubtotalLoading}
+                  />
+                ))}
+              </ul>
+            </>
           )}
-          <Button>Fechar pedido</Button>
         </ProductsContainer>
       </PageContainer>
     </>
@@ -107,6 +153,27 @@ const PageContainer = styled.div`
   @media (max-width: 700px) {
     margin-top: 100px;
   }
+`;
+
+const SubTotalDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 20px;
+`;
+
+const Text = styled.div`
+  height: 40px;
+`;
+
+const Button = styled.button`
+  width: 100%;
+  height: 50px;
+  border: none;
+  background-color: ${BASE_COLOR};
+  color: white;
+  font-size: 25px;
+  border-radius: 3px;
 `;
 
 const ProductsContainer = styled.div`
@@ -125,12 +192,8 @@ const Options = styled.div`
   height: 200px;
 `;
 
-const Button = styled.button`
-  width: 50%;
-  height: 50px;
-  border: none;
-  background-color: ${BASE_COLOR};
-  color: white;
+const Strong = styled.span`
   font-size: 25px;
-  border-radius: 3px;
+  font-weight: bold;
+  color: ${BASE_COLOR};
 `;

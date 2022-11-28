@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { BASE_COLOR } from "../../constants/colors.js";
 import axios from "axios";
 import API_URLs from "../../constants/URLS.js";
-import Product from "./Product.js";
+import Product from "../../components/Product.js";
 import LoadingDiv from "../../components/LoadingDiv.js";
 import Header from "../../components/Header.js";
 import swal from "sweetalert";
