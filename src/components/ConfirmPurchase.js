@@ -12,30 +12,45 @@ export default function ConfirmPurchase() {
         <header>Você deseja realizar a compra?</header>
         <Content>
           <section>
-            {/*             <ul>
-              <p>Produtos:</p>
-              <li>1 Fone top R$ 200,00</li>
-              <li>2 Teclado pop it its R$ 200,00</li>
-              <li>1 Teclado de luizinha R$ 200,00</li>
-            </ul> */}
-            <p>Produtos:</p>
-            <table border="1">
-              <tr>
-                <td>1</td>
-                <td>Fone top</td>
-                <td>R$ 200,00</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Teclado pop it its</td>
-                <td>R$ 250,00</td>
-              </tr>
-            </table>
-            <p>Valor total: R$ 10.000,00</p>
+            <div>
+              <p>
+                <span>Produtos:</span>
+              </p>
+
+              <table border="1">
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>Fone top</td>
+                    <td>R$ 200,00</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Teclado pop it its</td>
+                    <td>R$ 250,00</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              <span>Valor total: </span>R$ 10.000,00
+            </p>
           </section>
+
           <div></div>
           <section>
-            <p>Cliente: Nicolas</p>
+            <p>
+              <span>Cliente: </span>Nicolas
+            </p>
+            <p>
+              <span>CPF: </span>______
+            </p>
+            <p>
+              <span>Email: </span>______
+            </p>
+            <p>
+              <span>Endereço: </span>______
+            </p>
           </section>
         </Content>
         <Buttons>
@@ -54,6 +69,9 @@ const ConfirmPurchaseScreen = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
 `;
 
 const ConfirmScreen = styled.div`
@@ -84,22 +102,42 @@ const Content = styled.main`
   display: flex;
   justify-content: space-between;
 
-  div {
+  & > div {
     background-color: #eda793;
     width: 1px;
-    height: 80%;
+    height: 90%;
     margin: auto 0;
   }
 
   section {
     width: 50%;
-    padding: 10px;
+    padding: 20px 10px;
   }
 
   section:first-child {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+  section:first-child div {
+    overflow: auto;
+  }
+  section:first-child p:last-child {
+    margin-top: 20px;
+  }
+
+  section:last-child p {
+    margin-bottom: 10px;
+  }
+
+  span {
+    font-weight: bold;
+  }
+
+  table {
+    width: 100%;
+    line-height: 30px;
+    margin-top: 10px;
   }
 `;
 

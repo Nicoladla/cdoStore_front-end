@@ -1,4 +1,4 @@
-const baseApiUrl = "http://localhost:5000";
+const baseApiUrl = "https://cdostore-back-end.onrender.com";
 
 const API_URLs = {
   signIn: `${baseApiUrl}/sign-in`,
