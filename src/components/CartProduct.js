@@ -1,11 +1,10 @@
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import swal from "sweetalert";
-import LoadingDiv from "../../components/LoadingDiv";
-import { BASE_COLOR } from "../../constants/colors";
-import API_URLs from "../../constants/URLS";
-import AuthContext from "../../contexts/AuthContext";
+import API_URLs from "../constants/URLS";
+import AuthContext from "../contexts/AuthContext";
+import { BASE_COLOR } from "../constants/colors";
 
 export default function CartProduct(props) {
   const {
@@ -16,49 +15,48 @@ export default function CartProduct(props) {
     image,
     inStock,
     amountInCart,
-    wasClickedId,
-    setWasClickedId,
+    setIsSubtotalLoading,
   } = props;
 
   const { auth } = useContext(AuthContext);
+  const config = {
+    headers: {
+      Authorization: auth,
+    },
+  };
+  async function deleteProduct(id) {
+    setIsSubtotalLoading(true);
+
+    try {
+      await axios.delete(`${API_URLs.myCart}/${id}/?all=true`, config);
+      setIsSubtotalLoading(false);
+    } catch (err) {
+      console.log(err);
+      swal({
+        icon: "error",
+        title: "Ops!...",
+        text: err.response.data.message,
+      });
+    }
+  }
 
   function deleteFromCart(id) {
     swal({
       type: "warning",
       text: "Tem certeza que deseja remover item?",
       buttons: ["Cancelar", "Remover"],
-    }).then(async (value) => {
+    }).then((value) => {
       if (value) {
-        setWasClickedId(undefined);
-        const config = {
-          headers: {
-            Authorization: auth,
-          },
-        };
-        try {
-          await axios.delete(`${API_URLs.myCart}/${id}/?all=true`, config);
-          setWasClickedId(undefined);
-        } catch (err) {
-          console.log(err);
-          swal({
-            icon: "error",
-            title: "Ops!...",
-            text: err.response.data.message,
-          });
-        }
+        deleteProduct(id);
       }
     });
   }
 
   async function removeFromCart(id) {
-    const config = {
-      headers: {
-        Authorization: auth,
-      },
-    };
+    setIsSubtotalLoading(true);
     try {
       await axios.delete(`${API_URLs.myCart}/${id}`, config);
-      setWasClickedId(undefined);
+      setIsSubtotalLoading(false);
     } catch (err) {
       console.log(err);
       swal({
@@ -70,14 +68,10 @@ export default function CartProduct(props) {
   }
 
   async function addOnCart(id) {
-    const config = {
-      headers: {
-        Authorization: auth,
-      },
-    };
+    setIsSubtotalLoading(true);
     try {
       await axios.post(`${API_URLs.myCart}/${id}`, {}, config);
-      setWasClickedId(undefined);
+      setIsSubtotalLoading(false);
     } catch (err) {
       console.log(err);
       swal({
@@ -110,20 +104,9 @@ export default function CartProduct(props) {
         </AmountOptions>
         <Price>
           <span>
-            {wasClickedId === id ? (
-              console.log(id)
-            ) : (
-              // <LoadingDiv isLoading={true} />
-              <>
-                R$
-                {(price * amountInCart)
-                  .toFixed(2)
-                  .toString()
-                  .replace(".", ",")}{" "}
-                (x
-                {amountInCart})
-              </>
-            )}
+            R$
+            {(price * amountInCart).toFixed(2).toString().replace(".", ",")} (x
+            {amountInCart})
           </span>
         </Price>
       </Options>
