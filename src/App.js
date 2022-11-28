@@ -3,12 +3,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import GlobalStyle from "./assets/styles/GlobalStyle";
 import ResetCss from "./assets/styles/ResetCss";
+import ConfirmPurchase from "./components/ConfirmPurchase";
 
 import AuthContext from "./contexts/AuthContext";
 import SignIn from "./pages/Authentication/SignIn";
 import SignUp from "./pages/Authentication/SignUp";
 import Home from "./pages/Home/Home";
 import MyCart from "./pages/MyCart/MyCart";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const [auth, setAuth] = useState("");
@@ -21,6 +23,8 @@ function App() {
       <AuthContext.Provider value={{ auth, setAuth }}>
         <BrowserRouter>
           <Routes>
+            <Route path="teste" element={<ConfirmPurchase />} />
+            <Route path="*" element={<NotFound />} />
             <Route path="/" element={<Home />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
