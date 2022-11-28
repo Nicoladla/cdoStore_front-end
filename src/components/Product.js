@@ -59,7 +59,7 @@ export default function Product({ id, name, description, price, image }) {
       <Image src={image} />
       <Description>
         <Text>{description}</Text>
-        <Price>R${price}</Price>
+        <Price>R${price.toFixed(2)}</Price>
       </Description>
       <PurchaseDiv>
         <ButtonAddCart onClick={addToCart}>

@@ -10,11 +10,14 @@ import API_URLs from "../../constants/URLS";
 import AuthContext from "../../contexts/AuthContext";
 import CartProduct from "../../components/CartProduct";
 import { ColorRing } from "react-loader-spinner";
+import ConfirmPurchase from "../../components/ConfirmPurchase";
 
 export default function MyCart() {
   const [cartProducts, setCartProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isSubtotalLoading, setIsSubtotalLoading] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [info, setInfo] = useState(undefined);
 
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
@@ -48,6 +51,20 @@ export default function MyCart() {
         navigate("/sign-in");
       }
     });
+  }
+
+  function confirmPurchase() {
+    const arrayInfo = cartProducts.map((p) => {
+      return {
+        name: p.name,
+        amount: p.amount,
+        price: p.price,
+      };
+    });
+
+    arrayInfo.total = subTotalInfo.subTotal;
+    setInfo(arrayInfo);
+    setShowConfirmation(true);
   }
 
   async function getMyCart() {
@@ -89,6 +106,13 @@ export default function MyCart() {
       />
       <PageContainer>
         <ProductsContainer>
+          {showConfirmation && (
+            <ConfirmPurchase
+              info={info}
+              setShowConfirmation={setShowConfirmation}
+            />
+          )}
+
           {isLoading ? (
             <LoadingDiv isLoading={isLoading} color={BASE_COLOR} />
           ) : cartProducts.length === 0 ? (
@@ -106,7 +130,7 @@ export default function MyCart() {
                       .replace(".", ",")}
                   </Strong>
                 </Text>
-                <Button>
+                <Button onClick={confirmPurchase}>
                   {isSubtotalLoading ? (
                     <ColorRing
                       visible={isSubtotalLoading}

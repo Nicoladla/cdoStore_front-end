@@ -1,6 +1,12 @@
 import styled from "styled-components";
+import swal from "sweetalert";
 
-export default function ConfirmPurchase() {
+export default function ConfirmPurchase({ info, setShowConfirmation }) {
+  function confirm() {
+    swal({ icon: "success", text: "Pedido Finalizado" });
+    setShowConfirmation(false);
+  }
+
   return (
     <ConfirmPurchaseScreen>
       <ConfirmScreen>
@@ -14,21 +20,18 @@ export default function ConfirmPurchase() {
 
               <table border="1">
                 <tbody>
-                  <tr>
-                    <td>1</td>
-                    <td>Fone top</td>
-                    <td>R$ 200,00</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Teclado pop it its</td>
-                    <td>R$ 250,00</td>
-                  </tr>
+                  {info.map((i) => (
+                    <tr>
+                      <td>{i.amount}</td>
+                      <td>{i.name}</td>
+                      <td>{i.price}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
             <p>
-              <span>Valor total: </span>R$ 10.000,00
+              <span>Valor total: </span>R$ {info.total}
             </p>
           </section>
 
@@ -49,8 +52,8 @@ export default function ConfirmPurchase() {
           </section>
         </Content>
         <Buttons>
-          <button>Cancelar</button>
-          <button>Confirmar</button>
+          <button onClick={() => setShowConfirmation(false)}>Cancelar</button>
+          <button onClick={confirm}>Confirmar</button>
         </Buttons>
       </ConfirmScreen>
     </ConfirmPurchaseScreen>
@@ -67,6 +70,7 @@ const ConfirmPurchaseScreen = styled.div`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 2000;
 `;
 
 const ConfirmScreen = styled.div`
