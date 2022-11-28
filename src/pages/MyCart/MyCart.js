@@ -10,6 +10,7 @@ import API_URLs from "../../constants/URLS";
 import AuthContext from "../../contexts/AuthContext";
 import CartProduct from "../../components/CartProduct";
 import { ColorRing } from "react-loader-spinner";
+import ConfirmPurchase from "../../components/ConfirmPurchase";
 
 export default function MyCart() {
   const [cartProducts, setCartProducts] = useState([]);
@@ -48,6 +49,13 @@ export default function MyCart() {
         navigate("/sign-in");
       }
     });
+  }
+
+  function confirmPurchase() {
+    const info = cartProducts.map((p) => {
+      return [{ name: p.name, price: p.price, amount: p.amountInCart }];
+    });
+    info.total = subTotalInfo.subTotal;
   }
 
   async function getMyCart() {
@@ -89,6 +97,7 @@ export default function MyCart() {
       />
       <PageContainer>
         <ProductsContainer>
+          <ConfirmPurchase />
           {isLoading ? (
             <LoadingDiv isLoading={isLoading} color={BASE_COLOR} />
           ) : cartProducts.length === 0 ? (
@@ -106,7 +115,7 @@ export default function MyCart() {
                       .replace(".", ",")}
                   </Strong>
                 </Text>
-                <Button>
+                <Button onClick={confirmPurchase}>
                   {isSubtotalLoading ? (
                     <ColorRing
                       visible={isSubtotalLoading}

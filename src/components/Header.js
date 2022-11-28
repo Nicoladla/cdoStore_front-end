@@ -88,6 +88,7 @@ const HeaderDiv = styled.header`
 
   h1 {
     font-size: 80px;
+    font-family: "Righteous", cursive;
     @media (max-width: 700px) {
       display: none;
     }

@@ -29,6 +29,7 @@ function App() {
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/my-cart" element={<MyCart />} />
+            <Route path="/confirm-purchase" element={<ConfirmPurchase />} />
           </Routes>
         </BrowserRouter>
       </AuthContext.Provider>

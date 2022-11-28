@@ -24,6 +24,7 @@ export default function CartProduct(props) {
       Authorization: auth,
     },
   };
+
   async function deleteProduct(id) {
     setIsSubtotalLoading(true);
 

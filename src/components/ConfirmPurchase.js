@@ -1,6 +1,11 @@
+import { useContext } from "react";
 import styled from "styled-components";
+import ConfirmProducts from "../contexts/ConfirmProductsContext";
 
 export default function ConfirmPurchase() {
+  const { confirmProducts } = useContext(ConfirmProducts);
+  console.log(confirmProducts);
+
   return (
     <ConfirmPurchaseScreen>
       <ConfirmScreen>
