@@ -23,7 +23,6 @@ function App() {
       <AuthContext.Provider value={{ auth, setAuth }}>
         <BrowserRouter>
           <Routes>
-            <Route path="teste" element={<ConfirmPurchase />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/" element={<Home />} />
             <Route path="/sign-in" element={<SignIn />} />
