@@ -9,6 +9,7 @@ import SignIn from "./pages/Authentication/SignIn";
 import SignUp from "./pages/Authentication/SignUp";
 import Home from "./pages/Home/Home";
 import MyCart from "./pages/MyCart/MyCart";
+import NotFound from "./pages/NotFound";
 
 function App() {
   const [auth, setAuth] = useState("");
@@ -21,6 +22,7 @@ function App() {
       <AuthContext.Provider value={{ auth, setAuth }}>
         <BrowserRouter>
           <Routes>
+            <Route path="*" element={<NotFound />} />
             <Route path="/" element={<Home />} />
             <Route path="/sign-in" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
